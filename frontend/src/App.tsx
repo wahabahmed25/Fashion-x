@@ -1,8 +1,13 @@
-
+import { Routes, Route, Navigate } from "react-router-dom"
+import MainPage from "./pages/MainPage"
 const App = () => {
+  
   return (
     <div>
-      <h1 className="flex justify-center">som</h1>
+      <Routes>
+        <Route path = "/" element={<Navigate to="/main" replace />} />
+        <Route path="/main" element = {<MainPage />}/>
+      </Routes>
     </div>
   )
 }
