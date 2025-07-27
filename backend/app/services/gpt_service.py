@@ -11,21 +11,28 @@ client = OpenAI(
 )
 
 
-response = client.chat.completions.create(
-    messages=[
-        {
-            "role": "system",
-            "content": "You are a helpful assistant.",
-        },
-        {
-            "role": "user",
-            "content": "What is the capital of France?",
-        }
-    ],
-    temperature=1.0,
-    top_p=1.0,
-    max_tokens=1000,
-    model=model_name
-)
+def get_styling_recommendation(input_value: dict, weather_info: dict) -> str:
+    prompt = f"""
+    A user submitted the following preferences and weather data.
+    
+    Preferences:
+    {input_value}
 
-print(response.choices[0].message.content)
+    Weather:
+    {weather_info}
+
+    Based on this, give a personalized fashion styling recommendation.
+    """
+
+    response = client.chat.completions.create(
+        messages=[
+            {"role": "system", "content": "You are a helpful fashion stylist."},
+            {"role": "user", "content": prompt}
+        ],
+        temperature=0.7,
+        top_p=1.0,
+        max_tokens=500,
+        model=model_name
+    )
+
+    return response.choices[0].message.content

@@ -1,48 +1,53 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 
-interface propType {
-  location: string;
+interface Props {
+  onInfoRetrieved: (data: {
+    locationName: string;
+    temperature: string;
+    condition: string;
+  }) => void;
 }
 
-const GetCurrentWeather = ({ location }: propType) => {
-  const [temp, setTemp] = useState<string | null>(null);
-  const [condition, setCondition] = useState<string | null>(null);
-
-  const [error, setError] = useState<string | null>(null);
-
+const GetCurrentWeather = ({ onInfoRetrieved }: Props) => {
   useEffect(() => {
-    if (!location) return;
+    if (!navigator.geolocation) {
+      console.error("Geolocation not supported.");
+      return;
+    }
 
-    const fetchWeather = async () => {
-      try {
-        const apiKey = import.meta.env.VITE_WEATHER_API_KEY;
-        const response = await axios.get(
-          `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${location}`
-        );
-        const celsius = response.data.current.temp_c;
-        setTemp(`${Math.floor(celsius * 1.8 + 32)}`); //converts to f
-        setCondition(response.data.current.condition.text);
-      } catch (err) {
-        setError(`error fetching weather ${err}`);
-        console.error("error fetching weather", err);
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+
+        try {
+          const apiKey = import.meta.env.VITE_WEATHER_API_KEY;
+          const response = await axios.get(
+            `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${lat},${lon}`
+          );
+
+          const locationName = response.data.location.name;
+          const condition = response.data.current.condition.text;
+          const tempCelsius = response.data.current.temp_c;
+          const tempFahrenheit = Math.floor(tempCelsius * 1.8 + 32).toString();
+
+          onInfoRetrieved({
+            locationName,
+            temperature: tempFahrenheit,
+            condition,
+          });
+        } catch (error) {
+          console.error("Error fetching weather:", error);
+        }
+      },
+      (err) => {
+        console.error("Error getting location:", err);
       }
-    };
+    );
+  }, [onInfoRetrieved]);
 
-    fetchWeather();
-  }, [location]);
-
-  return (
-    <div className="p-2">
-      {error && <p className="text-red-600">{error}</p>}
-      {temp && condition && (
-        <p>
-          {location}: {temp}°C, {condition}
-        </p>
-      )}
-      {!temp && !error && <p>Loading...</p>}
-    </div>
-  );
+  return null; // no UI, just logic
 };
 
 export default GetCurrentWeather;
