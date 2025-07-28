@@ -7,8 +7,19 @@ interface MoodInputProps {
 }
 
 const MoodInput = ({ mood, onChange }: MoodInputProps) => {
-  const moods = ["Happy", "Sad", "Excited", "Tired"];
-
+  const moods = [
+    "Casual",
+    "Romantic",
+    "Playful",
+    "Chill",
+    "Edgy",
+    "Professional",
+    "Elegant",
+    "Bold",
+    "Minimalist",
+    "sporty",
+    "comfy", 
+  ];
   return (
     <div>
       <Dropdown

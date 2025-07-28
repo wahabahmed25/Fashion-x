@@ -13,16 +13,32 @@ client = OpenAI(
 
 def get_styling_recommendation(input_value: dict, weather_info: dict) -> str:
     prompt = f"""
-    A user submitted the following preferences and weather data.
-    
-    Preferences:
-    {input_value}
+    You are a helpful fashion stylist. When responding, do not write a paragraph.
 
-    Weather:
-    {weather_info}
+    Use this structure:
 
-    Based on this, give a personalized fashion styling recommendation.
+    "Given that you're a {input_value.get("gender", "person")}, based on the {input_value.get("occasion", "general occasion")}, your preferences {input_value.get("preferences", "are not specified")}, and it being {weather_info.get("temperature", "unknown")}°F with {weather_info.get("condition", "unknown weather")} conditions..."
+
+    Then suggest a full outfit broken down clearly like this:
+
+    TOP:
+    - ...
+
+    BOTTOM:
+    - ...
+
+    SHOES:
+    - ...
+
+    ACCESSORIES:
+    - ...
+
+    OPTIONAL LAYERS:
+    - ...
+
+    Only recommend items based on the given context. Be brief but stylish and descriptive.
     """
+
 
     response = client.chat.completions.create(
         messages=[
