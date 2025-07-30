@@ -4,6 +4,7 @@ import InputFieldOne from "../input fields/InputFieldOne";
 import MoodInput from "./MoodInput";
 import GetCurrentWeather from "./GetCurrentWeather";
 import GenderInput from "./GenderInput";
+import OutfitFinder from "../outfit finder/OutfitFinder";
 interface inputProp {
   preferences: string;
   occasion: string;
@@ -49,15 +50,13 @@ const Stylist = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white to-slate-100 py-10 px-4 md:px-10">
+    <div className="min-h-screen bg-gradient-to-br from-white to-slate-100  px-4 md:px-10">
       <div className="max-w-3xl mx-auto bg-white shadow-xl rounded-2xl p-6 md:p-10">
         <h1 className="text-2xl font-semibold mb-6 text-gray-800">
           Personal AI Stylist
         </h1>
 
-        {error && (
-          <p className="text-red-600 font-medium mb-4">{error}</p>
-        )}
+        {error && <p className="text-red-600 font-medium mb-4">{error}</p>}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <InputFieldOne
@@ -82,9 +81,11 @@ const Stylist = () => {
               setInputValue((prev) => ({ ...prev, mood: value }))
             }
           />
-          <GenderInput 
+          <GenderInput
             gender={inputValue.gender}
-            onChange={(value) => setInputValue((prev) => ({...prev, gender: value}))}
+            onChange={(value) =>
+              setInputValue((prev) => ({ ...prev, gender: value }))
+            }
           />
 
           <GetCurrentWeather onInfoRetrieved={setWeatherInfo} />
@@ -126,21 +127,13 @@ const Stylist = () => {
       {/* Placeholder for Future Functionalities */}
       <div className="max-w-3xl mx-auto mt-10">
         <div className="grid gap-6 md:grid-cols-2">
-          <div className="bg-white shadow-md rounded-xl p-6 border">
-            <h2 className="text-lg font-semibold text-gray-800 mb-2">
-              Fashion Designer (Coming Soon)
+          
+          
+          <div className="bg-white shadow-md rounded-xl p-6">
+            <h2 className="text-lg font-semibold text-center text-gray-800 mb-2">
+              Outfit Finder
             </h2>
-            <p className="text-sm text-gray-600">
-              Upload your ideas and let the AI create stylish designs.
-            </p>
-          </div>
-          <div className="bg-white shadow-md rounded-xl p-6 border">
-            <h2 className="text-lg font-semibold text-gray-800 mb-2">
-              Outfit Rater (Coming Soon)
-            </h2>
-            <p className="text-sm text-gray-600">
-              Get AI-based feedback on your outfit using image upload.
-            </p>
+            <OutfitFinder />
           </div>
         </div>
       </div>
