@@ -1,2 +1,5 @@
 .env
 dataset/
+Makefile
+dataset_embeddings.pkl
+temp_uploads

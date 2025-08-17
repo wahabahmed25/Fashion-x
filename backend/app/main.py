@@ -1,18 +1,22 @@
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from app.routers import stylist
+from app.routers import stylist, similarity
+from app.config import setup_cors
+from fastapi.staticfiles import StaticFiles
+import os
+
 app = FastAPI()
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+setup_cors(app)
 
+
+app.mount("/dataset", StaticFiles(directory=os.path.join("dataset")), name="dataset")
+UPLOAD_DIR = "temp_uploads"
+os.makedirs(UPLOAD_DIR, exist_ok=True)
+app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 
 app.include_router(stylist.router)
+app.include_router(similarity.router)
+
 
 @app.get("/")
 async def root():

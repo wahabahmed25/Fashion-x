@@ -1,0 +1,30 @@
+VIRTUAL SEARCH
+CBIR - content based image retrieval
+
+
+Full goal:
+- user uploads a piece of clothing
+- user gets returned similar pieces of clothings and where to find them
+
+pretrained model : CLIP by OpenAI
+
+phase 1 - returning similar pieces (CBIR):
+- user uploads a piece of clothing in frontend
+- backend takes in the image and inserts it into the ai model that we train
+- returns 5 images closest to the uploaded image
+how to train model:
+formula for numbers in images (RGB): pixel h * pixel w * 3 = total numbers in image (feature vector)
+- summarize each image into a feature vector
+- a pretrained model takes the image, passes it through layers of filters and learns to detect: edges, colors, shapes etc
+- which creates a 512-length vector
+- if vectors are "close" to the image user uploads, they will look "similar".
+- return 5 images with the closest vectors.
+
+backend:
+- user uploads image
+- extract its feature vector
+- store vector + image path
+- 
+
+phase 2 - returns stores/locations (CBIR):
+- 
